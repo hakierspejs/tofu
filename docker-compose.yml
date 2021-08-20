@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  bot:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./db:/src/app/db
+    entrypoint: ["/src/app/_build/dev/rel/tofu/bin/tofu", "start"]
+volumes:
+  db: {}
