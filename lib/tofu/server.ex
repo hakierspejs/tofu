@@ -14,11 +14,16 @@ defmodule Tofu.Server do
   get "/ping" do
     client = Tofu.Bot.Factory.retrieve(:irc_client)
 
-    ExIRC.Client.msg(
-      client,
-      :privmsg,
-      "#hakierspejs-machines",
-      "I've got ping from http webhook."
+    {:ok, channels} = Tofu.Config.ping_channels()
+
+    channels
+    |> Enum.map(
+      &ExIRC.Client.msg(
+        client,
+        :privmsg,
+        &1,
+        "I've got ping from http webhook."
+      )
     )
 
     conn
