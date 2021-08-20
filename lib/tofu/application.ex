@@ -7,6 +7,8 @@ defmodule Tofu.Application do
 
   @impl true
   def start(_type, _args) do
+    server_config = Tofu.Config.Server.read()
+
     children = [
       # HTTP server for webhooks
       {
@@ -18,7 +20,7 @@ defmodule Tofu.Application do
              :name => "ELO",
              :channel => "##wiadro"
            }},
-        options: [port: 8080]
+        options: [port: server_config.port]
       },
       Tofu.Bot.Supervisor,
 
