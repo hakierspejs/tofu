@@ -25,7 +25,8 @@ defmodule Tofu.MixProject do
       {:exirc, "~> 2.0.0"},
       {:plug_cowboy, "~> 2.0"},
       {:cubdb, "~> 1.0.0"},
-      {:jason, "~> 1.2"}
+      {:jason, "~> 1.2"},
+      {:skogsra, "~> 2.3"}
     ]
   end
 end
