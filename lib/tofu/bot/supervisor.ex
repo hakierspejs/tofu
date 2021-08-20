@@ -11,26 +11,18 @@ defmodule Tofu.Bot.Supervisor do
   def init(:ok) do
     {:ok, client} = ExIRC.start_link!()
 
+    {:ok, join_channels} = Tofu.Config.join_channels()
+
+    bot_config = Tofu.Config.Bot.read()
+
     children = [
       {Tofu.Bot.Factory, [name: :irc_client]},
 
       # Define workers and child supervisors to be supervised
-      {Tofu.Bot.ConnectionHandler,
-       %Tofu.Bot.ConnectionHandler.State{
-         :host => "irc.libera.chat",
-         :port => 6667,
-         :pass => "",
-         :nick => "tofu[b]",
-         :user => "tofu[b]",
-         :name => "Tofu Bot",
-         :handlers => [],
-         :client_proc => :irc_client,
-         :client => nil,
-         :messages_service => Tofu.Bot.Messages
-       }},
+      {Tofu.Bot.ConnectionHandler, bot_config.connection},
 
       # Here's where we specify the channels to join
-      {Tofu.Bot.LoginHandler, [:irc_client, ["#hakierspejs-machines"]]}
+      {Tofu.Bot.LoginHandler, [:irc_client, join_channels]}
     ]
 
     Supervisor.init(children, strategy: :one_for_all)
